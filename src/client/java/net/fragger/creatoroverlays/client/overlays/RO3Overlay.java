@@ -26,7 +26,11 @@ public class RO3Overlay extends StaticOverlay implements Overlay {
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker) {
         if (isRendered) {
-            render(guiGraphicsExtractor,getTexture());
+            if (color >= 3) {
+                renderTinted(guiGraphicsExtractor, state ? RO3_Overlay_White : Quarter_Overlay_White, getColorTint(color));
+            } else {
+                render(guiGraphicsExtractor, getTexture());
+            }
         }
     }
     public void updateRenderStatus() {
@@ -49,6 +53,8 @@ public class RO3Overlay extends StaticOverlay implements Overlay {
                 texture = RO3_Overlay_White;
             } else if (color == 2) {
                 texture = RO3_Overlay_Red;
+            } else if (color >= 3) {
+                texture = RO3_Overlay_White;
             } else {
                 texture = RO3_Overlay;
             }
@@ -57,6 +63,8 @@ public class RO3Overlay extends StaticOverlay implements Overlay {
                 texture = Quarter_Overlay_White;
             } else if (color == 2) {
                 texture = Quarter_Overlay_Red;
+            } else if (color >= 3) {
+                texture = Quarter_Overlay_White;
             } else {
                 texture = Quarter_Overlay;
             }

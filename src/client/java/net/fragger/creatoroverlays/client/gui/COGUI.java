@@ -6,10 +6,12 @@ import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import net.fabricmc.fabric.api.util.TriState;
 import net.fragger.creatoroverlays.creatoroverlays;
 import net.fragger.creatoroverlays.util.config.COConfigs;
+import net.fragger.creatoroverlays.client.StaticOverlay;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.coScreen;
+import static net.fragger.creatoroverlays.event.KeyInputHandler.ro3GUI;
 
 public class COGUI extends AbstractGUI {
 
@@ -56,19 +58,14 @@ public class COGUI extends AbstractGUI {
         }
         notes.add(defaultColor, 10, 10, 210, 20);
         defaultColor.setOnClick(() -> {
-            if (COConfigs.getValue("overlay.color").equals(1)){
-                    COConfigs.updateConfig(new Pair<>("overlay.color", 2));
-                    updateColor();
-                    defaultColor.setLabel(Component.translatable(color));
-            } else if (COConfigs.getValue("overlay.color").equals(2)) {
-                    COConfigs.updateConfig(new Pair<>("overlay.color", 0));
-                    updateColor();
-                    defaultColor.setLabel(Component.translatable(color));
-            } else {
-                    COConfigs.updateConfig(new Pair<>("overlay.color", 1));
-                    updateColor();
-                    defaultColor.setLabel(Component.translatable(color));
+            int nextColor = ((Integer) COConfigs.getValue("overlay.color") + 1) % StaticOverlay.COLOR_COUNT;
+            COConfigs.updateConfig(new Pair<>("overlay.color", nextColor));
+            if (COConfigs.getValue("color.mode").equals(0)) {
+                ro3GUI.getOverlay().setColor(nextColor);
+                ro3GUI.updateSprite();
             }
+            updateColor();
+            defaultColor.setLabel(Component.translatable(color));
         });
 
         WButton colorMode = new WButton(Component.translatable(colorM));
@@ -127,13 +124,18 @@ public class COGUI extends AbstractGUI {
     }
 
     public void updateColor(){
-        if (COConfigs.getValue("overlay.color").equals(1)) {
-            color = "key.creatoroverlays.gui.default.white";
-        } else if (COConfigs.getValue("overlay.color").equals(2)) {
-            color = "key.creatoroverlays.gui.default.red";
-        } else {
-            color = "key.creatoroverlays.gui.default.black";
-        }
+        int selectedColor = (Integer) COConfigs.getValue("overlay.color");
+        color = switch (selectedColor) {
+            case 1 -> "key.creatoroverlays.gui.default.white";
+            case 2 -> "key.creatoroverlays.gui.default.red";
+            case 3 -> "key.creatoroverlays.gui.default.blue";
+            case 4 -> "key.creatoroverlays.gui.default.green";
+            case 5 -> "key.creatoroverlays.gui.default.yellow";
+            case 6 -> "key.creatoroverlays.gui.default.cyan";
+            case 7 -> "key.creatoroverlays.gui.default.magenta";
+            case 8 -> "key.creatoroverlays.gui.default.orange";
+            default -> "key.creatoroverlays.gui.default.black";
+        };
     }
     public void updateColorMode() {
         if (COConfigs.getValue("color.mode").equals(1)) {

@@ -22,6 +22,15 @@ public class COConfigs {
 
     public static void updateConfig(Pair<String, ?> keyValuePair) {
         configs.updateKeyValuePair(keyValuePair);
+        switch (keyValuePair.getFirst()) {
+            case "overlay.color" -> OVERLAY_COLOR = (Integer) keyValuePair.getSecond();
+            case "color.mode" -> COLOR_MODE = (Integer) keyValuePair.getSecond();
+            case "display.mode" -> DISPLAY_MODE = (Integer) keyValuePair.getSecond();
+            case "custom.mode" -> CUSTOM_MODE = (Integer) keyValuePair.getSecond();
+            case "ro3.color" -> RO3_COLOR = (Integer) keyValuePair.getSecond();
+            case "vv.color" -> VV_COLOR = (Integer) keyValuePair.getSecond();
+            case "cam.color" -> CAM_COLOR = (Integer) keyValuePair.getSecond();
+        }
     }
     public static void writeConfigs() {
         CONFIG.updateConfig();
@@ -69,7 +78,7 @@ public class COConfigs {
     }
 
     private static void assignConfigs() {
-        OVERLAY_COLOR = CONFIG.getOrDefault("overlay.color", 0);
+        OVERLAY_COLOR = normalizeColor(CONFIG.getOrDefault("overlay.color", 0));
         COLOR_MODE = CONFIG.getOrDefault("color.mode", 0);
         DISPLAY_MODE = CONFIG.getOrDefault("display.mode", 0);
         DISPLAY_RO3 = CONFIG.getOrDefault("display.ro3", true);
@@ -80,10 +89,14 @@ public class COConfigs {
         DISPLAY_RO3VV = CONFIG.getOrDefault("display.ro3vv", false);
         CAM_MODE = CONFIG.getOrDefault("cam.mode", true);
         CUSTOM_MODE = CONFIG.getOrDefault("custom.mode", 0);
-        RO3_COLOR = CONFIG.getOrDefault("ro3.color", 0);
-        VV_COLOR = CONFIG.getOrDefault("vv.color", 0);
-        CAM_COLOR = CONFIG.getOrDefault("cam.color", 0);
+        RO3_COLOR = normalizeColor(CONFIG.getOrDefault("ro3.color", 0));
+        VV_COLOR = normalizeColor(CONFIG.getOrDefault("vv.color", 0));
+        CAM_COLOR = normalizeColor(CONFIG.getOrDefault("cam.color", 0));
 
         System.out.println("All " + configs.getConfigsList().size() + " have been set properly");
+    }
+
+    private static int normalizeColor(int color) {
+        return Math.clamp(color, 0, 8);
     }
 }

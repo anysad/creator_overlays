@@ -26,7 +26,12 @@ public class CamOverlay extends StaticOverlay implements Overlay {
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker) {
         if (isRendered) {
-            render(guiGraphicsExtractor, getTexture());
+            if (color >= 3) {
+                Identifier tintedTexture = state ? FaceCamLeft_White : FaceCamRight_White;
+                renderTinted(guiGraphicsExtractor, tintedTexture, getColorTint(color));
+            } else {
+                render(guiGraphicsExtractor, getTexture());
+            }
         }
     }
 
@@ -42,6 +47,8 @@ public class CamOverlay extends StaticOverlay implements Overlay {
                 texture = FaceCamLeft_White;
             } else if (color == 2) {
                 texture = FaceCamLeft_Red;
+            } else if (color >= 3) {
+                texture = FaceCamLeft_White;
             } else {
                 texture = FaceCamLeft;
             }
@@ -50,6 +57,8 @@ public class CamOverlay extends StaticOverlay implements Overlay {
                 texture = FaceCamRight_White;
             } else if (color == 2) {
                 texture = FaceCamRight_Red;
+            } else if (color >= 3) {
+                texture = FaceCamRight_White;
             } else {
                 texture = FaceCamRight;
             }

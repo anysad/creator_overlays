@@ -102,6 +102,9 @@ public class VVGUI extends AbstractGUI implements OverlayGUI {
     public void updateSprite() {
         vvPanel.remove(texture);
         texture = new WSprite(overlay.getTexture());
+        if (overlay.color() >= 3) {
+            texture.setOpaqueTint(net.fragger.creatoroverlays.client.StaticOverlay.getColorTint(overlay.color()));
+        }
         vvPanel.add(texture, 90, y * 2 + 2, 71, 127);
     }
     public void changeColor() {

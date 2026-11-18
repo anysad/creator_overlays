@@ -37,7 +37,12 @@ public class VVOverlay extends StaticOverlay implements Overlay {
         width = height / 16 * 9 + 10;
         x = client.getWindow().getGuiScaledWidth() / 2 - (width / 2) - 1;
         if (isRendered) {
-            render(guiGraphicsExtractor, getTexture(), x, y, width, height);
+            if (color >= 3) {
+                Identifier tintedTexture = isRO3VV ? VV_Overlay_White_RO3 : VV_Overlay_White;
+                renderTinted(guiGraphicsExtractor, tintedTexture, x, y, width, height, getColorTint(color));
+            } else {
+                render(guiGraphicsExtractor, getTexture(), x, y, width, height);
+            }
         }
     }
     public void updateRenderStatus() {
@@ -53,6 +58,8 @@ public class VVOverlay extends StaticOverlay implements Overlay {
                 texture = VV_Overlay_White;
             } else if (color == 2){
                 texture = VV_Overlay_Red;
+            } else if (color >= 3) {
+                texture = VV_Overlay_White;
             } else {
                 texture = VV_Overlay;
             }
@@ -64,6 +71,8 @@ public class VVOverlay extends StaticOverlay implements Overlay {
                 texture = VV_Overlay_White_RO3;
             } else if (color == 2) {
                 texture = VV_Overlay_Red_RO3;
+            } else if (color >= 3) {
+                texture = VV_Overlay_White_RO3;
             } else {
                 texture = VV_OVERLAY_RO3;
             }

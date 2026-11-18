@@ -9,15 +9,22 @@ public abstract class StaticOverlay extends AbstractOverlay {
 
    public boolean state = true;
 
-   //0 is black, 1 is white, and 2 is red
+   public static final int COLOR_COUNT = 9;
+
    public void colorCycle() {
-       if (color == 1) {
-           color = 2;
-       } else if (color == 2) {
-           color = 0;
-       } else {
-           color = 1;
-       }
+       color = (color + 1) % COLOR_COUNT;
+   }
+
+   public static int getColorTint(int color) {
+       return switch (color) {
+           case 3 -> 0xFF0000FF;
+           case 4 -> 0xFF00FF00;
+           case 5 -> 0xFFFFFF00;
+           case 6 -> 0xFF00FFFF;
+           case 7 -> 0xFFFF00FF;
+           case 8 -> 0xFFFF8000;
+           default -> 0xFFFFFFFF;
+       };
    }
 
    public void rotateUp() {

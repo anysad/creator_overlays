@@ -73,6 +73,9 @@ public class RO3GUI extends AbstractGUI implements OverlayGUI {
     public void updateSprite() {
         ro3Panel.remove(texture);
         texture = new WSprite(overlay.getTexture());
+        if (overlay.color() >= 3) {
+            texture.setOpaqueTint(net.fragger.creatoroverlays.client.StaticOverlay.getColorTint(overlay.color()));
+        }
         ro3Panel.add(texture, 12, y * 2 + 2, 226, 127);
     }
 

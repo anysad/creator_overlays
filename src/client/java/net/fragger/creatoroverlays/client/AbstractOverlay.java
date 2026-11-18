@@ -20,4 +20,17 @@ public abstract class AbstractOverlay implements HudElement
     {
         graphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, 0, 0, width, height, width, height);
     }
+
+    public static void renderTinted(GuiGraphicsExtractor graphics, Identifier texture, int tint)
+    {
+        Minecraft client = Minecraft.getInstance();
+        int width = client.getWindow().getGuiScaledWidth();
+        int height = client.getWindow().getGuiScaledHeight();
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, 0, 0, 0, 0, width, height, width, height, tint);
+    }
+
+    public static void renderTinted(GuiGraphicsExtractor graphics, Identifier texture, int x, int y, int width, int height, int tint)
+    {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, 0, 0, width, height, width, height, tint);
+    }
 }
