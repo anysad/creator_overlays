@@ -1,6 +1,6 @@
 package net.fragger.creatoroverlays.client;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public interface Overlay {
 

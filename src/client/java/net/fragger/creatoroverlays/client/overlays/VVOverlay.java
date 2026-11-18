@@ -5,23 +5,23 @@ import net.fragger.creatoroverlays.client.Overlay;
 import net.fragger.creatoroverlays.creatoroverlays;
 import net.fragger.creatoroverlays.util.config.COConfigs;
 import net.fragger.creatoroverlays.client.StaticOverlay;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.*;
 
 public class VVOverlay extends StaticOverlay implements Overlay {
     //blank vertical video
-    private static final Identifier VV_Overlay = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay.png");
-    private static final Identifier VV_Overlay_White = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay_white.png");
-    private static final Identifier VV_Overlay_Red = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay_red.png");
+    private static final Identifier VV_Overlay = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay.png");
+    private static final Identifier VV_Overlay_White = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay_white.png");
+    private static final Identifier VV_Overlay_Red = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/vv_overlay_red.png");
 
     //ro3 vertical video
-    private static final Identifier VV_OVERLAY_RO3 = Identifier.of(creatoroverlays.MOD_ID, "textures/overlays/vertical_video/rule_of_thirds/vv_overlay_ro3.png");
-    private static final Identifier VV_Overlay_White_RO3 = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/rule_of_thirds/vv_overlay_white_ro3.png");
-    private static final Identifier VV_Overlay_Red_RO3 = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/rule_of_thirds/vv_overlay_red_ro3.png");
+    private static final Identifier VV_OVERLAY_RO3 = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID, "textures/overlays/vertical_video/rule_of_thirds/vv_overlay_ro3.png");
+    private static final Identifier VV_Overlay_White_RO3 = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/rule_of_thirds/vv_overlay_white_ro3.png");
+    private static final Identifier VV_Overlay_Red_RO3 = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/vertical_video/rule_of_thirds/vv_overlay_red_ro3.png");
 
     private static boolean isRendered = false;
     public static boolean isRO3VV = COConfigs.DISPLAY_RO3VV;
@@ -31,15 +31,13 @@ public class VVOverlay extends StaticOverlay implements Overlay {
     private static int width = 0;
     private static int height = 0;
 
-    public void onHudRender(DrawContext drawContext, RenderTickCounter tickDelta) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client != null) {
-            height = client.getWindow().getScaledHeight();
-            width = height / 16 * 9 + 10;
-            x = client.getWindow().getScaledWidth() / 2 - (width / 2) - 1;
-        }
+    public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker) {
+        Minecraft client = Minecraft.getInstance();
+        height = client.getWindow().getGuiScaledHeight();
+        width = height / 16 * 9 + 10;
+        x = client.getWindow().getGuiScaledWidth() / 2 - (width / 2) - 1;
         if (isRendered) {
-            render(drawContext, getTexture(), x, y, width, height);
+            render(guiGraphicsExtractor, getTexture(), x, y, width, height);
         }
     }
     public void updateRenderStatus() {

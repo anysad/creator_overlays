@@ -4,24 +4,24 @@ import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WTabPanel;
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon;
 import net.fragger.creatoroverlays.creatoroverlays;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.*;
 
 public class RootGUI extends LightweightGuiDescription {
-    private static final Identifier LOGO = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/logo.png");
-    private static final Identifier RO3 = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/gridline_tab.png");
-    private static final Identifier VV = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/vv_tab.png");
-    private static final Identifier CAM = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/cam_tab.png");
-    private static final Identifier TP = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/tp_tab.png");
-    private static final Identifier CUSTOM = Identifier.of(creatoroverlays.MOD_ID,"textures/icons/custom_tab.png");
+    private static final Identifier LOGO = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/logo.png");
+    private static final Identifier RO3 = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/gridline_tab.png");
+    private static final Identifier VV = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/vv_tab.png");
+    private static final Identifier CAM = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/cam_tab.png");
+    private static final Identifier TP = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/tp_tab.png");
+    private static final Identifier CUSTOM = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/icons/custom_tab.png");
 
-    public static final Identifier TOGGLE_ON = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/toggle_on.png");
-    public static final Identifier TOGGLE_OFF = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/toggle_off.png");
-    public static final Identifier SELECT_ON = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/select_on.png");
-    public static final Identifier SELECT_OFF = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/select_off.png");
-    public static final Identifier RESET = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/reset_arrow.png");
+    public static final Identifier TOGGLE_ON = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/toggle_on.png");
+    public static final Identifier TOGGLE_OFF = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/toggle_off.png");
+    public static final Identifier SELECT_ON = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/select_on.png");
+    public static final Identifier SELECT_OFF = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/select_off.png");
+    public static final Identifier RESET = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/reset_arrow.png");
 
     public static int guiWidth = 250;
     public static int guiHeight = 230;
@@ -35,32 +35,32 @@ public class RootGUI extends LightweightGuiDescription {
 
         root.add(coGUI.coPanel, builder -> {
             builder.icon(new TextureIcon(LOGO));
-            builder.tooltip(Text.literal("Creator Overlays"));
+            builder.tooltip(Component.literal("Creator Overlays"));
         });
 
         root.add(ro3GUI.ro3Panel, builder -> {
             builder.icon(new TextureIcon(RO3));
-            builder.tooltip(Text.literal("Gridlines"));
+            builder.tooltip(Component.literal("Gridlines"));
         });
 
         root.add(vvGUI.vvPanel, builder -> {
             builder.icon(new TextureIcon(VV));
-            builder.tooltip(Text.literal("Vertical Video"));
+            builder.tooltip(Component.literal("Vertical Video"));
         });
 
         root.add(camGUI.camPanel, builder -> {
             builder.icon(new TextureIcon(CAM));
-            builder.tooltip(Text.literal("Face Cam"));
+            builder.tooltip(Component.literal("Face Cam"));
         });
 
         root.add(tpGUI.tpPanel, builder -> {
             builder.icon(new TextureIcon(TP));
-            builder.tooltip(Text.literal("Tracking Points"));
+            builder.tooltip(Component.literal("Tracking Points"));
         });
 
         root.add(customGUI.customPanel, builder -> {
             builder.icon(new TextureIcon(CUSTOM));
-            builder.tooltip(Text.literal("Custom Overlay"));
+            builder.tooltip(Component.literal("Custom Overlay"));
         });
     }
 }

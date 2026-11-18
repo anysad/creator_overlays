@@ -1,12 +1,12 @@
 package net.fragger.creatoroverlays.client;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public abstract class MoveableOverlay extends AbstractOverlay {
 
     public int mColor = 0;
 
-    public MinecraftClient client = MinecraftClient.getInstance();
+    public Minecraft client = Minecraft.getInstance();
 
     public boolean isSelected = false;
     public boolean isRendered = false;
@@ -33,8 +33,8 @@ public abstract class MoveableOverlay extends AbstractOverlay {
 
     public void reset() {
         if (client != null) {
-            x = client.getWindow().getScaledWidth() / 2 - (width / 2) - 1;
-            y = client.getWindow().getScaledHeight() / 2 - (height / 2) + 1;
+            x = client.getWindow().getGuiScaledWidth() / 2 - (width / 2) - 1;
+            y = client.getWindow().getGuiScaledHeight() / 2 - (height / 2) + 1;
         }
     }
 
@@ -54,21 +54,21 @@ public abstract class MoveableOverlay extends AbstractOverlay {
     }
     public void moveDown() {
         if (isRendered & isSelected) {
-            if (y < client.getWindow().getScaledHeight() - height) {
+            if (y < client.getWindow().getGuiScaledHeight() - height) {
                 y++;
             }
         }
     }
     public void moveDownFast() {
         if (isRendered & isSelected) {
-            if (y <= client.getWindow().getScaledHeight() - height - 5) {
+            if (y <= client.getWindow().getGuiScaledHeight() - height - 5) {
                 y = y + 5;
             }
         }
     }
     public void moveRight() {
         if (isRendered & isSelected) {
-            if (x < client.getWindow().getScaledWidth() - width) {
+            if (x < client.getWindow().getGuiScaledWidth() - width) {
                     x++;
             }
         }

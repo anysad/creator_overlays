@@ -1,36 +1,43 @@
 package net.fragger.creatoroverlays.client.overlays;
 
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fragger.creatoroverlays.client.MoveableOverlay;
 import net.fragger.creatoroverlays.client.Overlay;
 import net.fragger.creatoroverlays.creatoroverlays;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
 public class TPOverlay extends MoveableOverlay implements Overlay {
 
-    private static final Identifier TP_Overlay = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay.png");
-    private static final Identifier TP_Overlay_White = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_white.png");
-    private static final Identifier TP_Overlay_Red = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_red.png");
-    private static final Identifier TP_Overlay_Blue = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_blue.png");
-    private static final Identifier TP_Overlay_Selected = Identifier.of(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_selected.png");
+    private static final Identifier TP_Overlay = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay.png");
+    private static final Identifier TP_Overlay_White = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_white.png");
+    private static final Identifier TP_Overlay_Red = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_red.png");
+    private static final Identifier TP_Overlay_Blue = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_blue.png");
+    private static final Identifier TP_Overlay_Selected = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/overlays/tracking_point/tp_overlay_selected.png");
     @Override
-    public void onHudRender(DrawContext drawContext, RenderTickCounter tickDelta) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker) {
         if(isRendered) {
-                render(drawContext, getTexture(), x, y, width, height);
+                render(guiGraphicsExtractor, getTexture(), x, y, width, height);
             if (isSelected) {
-                render(drawContext, TP_Overlay_Selected, x, y, width, height);
+                render(guiGraphicsExtractor, TP_Overlay_Selected, x, y, width, height);
             }
         }
     }
     public void initialize() {
-        height = client.getWindow().getScaledHeight() / 17;
+        height = client.getWindow().getGuiScaledHeight() / 17;
         width = height;
         reset();
         isRendered = true;
         invisible = false;
         isSelected = true;
-        EVENT.register(this);
+
+        HudElementRegistry.attachElementBefore(
+                VanillaHudElements.CHAT,
+                Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID, "tp_overlay"),
+                this::extractRenderState
+        );
     }
     public void updateRenderStatus() {
         invisible = isRendered;

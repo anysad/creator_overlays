@@ -2,8 +2,8 @@ package net.fragger.creatoroverlays.client;
 
 import net.fragger.creatoroverlays.client.gui.overlayguis.TPGUIRow;
 import net.fragger.creatoroverlays.client.overlays.TPOverlay;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,7 @@ public class TPHandler {
         ArrayList<TPGUIRow> tempArray = new ArrayList<TPGUIRow>();
         for (TPGUIRow tpGUIRow : tpGUIRows) {
             if (tpGUIRow != null) {
-                tpGUIRow.updateLabel(Text.of("Tracking Point " + (tpArraySize + 1)));
+                tpGUIRow.updateLabel(Component.nullToEmpty("Tracking Point " + (tpArraySize + 1)));
                 tempArray.add(tpGUIRow);
                 tpArraySize++;
             }
@@ -106,10 +106,10 @@ public class TPHandler {
         }
     }
     public void moveDown() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         for (TPGUIRow tpGUIRow : tpGUIRows) {
             TPOverlay tp = tpGUIRow.getTP();
-            if (tp.getY() >= client.getWindow().getScaledHeight() - tp.getHeight() && tp.isSelected() && tp.isRendered()) {
+            if (tp.getY() >= client.getWindow().getGuiScaledHeight() - tp.getHeight() && tp.isSelected() && tp.isRendered()) {
                 return;
             }
         }
@@ -121,10 +121,10 @@ public class TPHandler {
         }
     }
     public void moveDownFast() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         for (TPGUIRow tpGUIRow : tpGUIRows) {
             TPOverlay tp = tpGUIRow.getTP();
-            if (tp.getY() > client.getWindow().getScaledHeight() - tp.getHeight() - 5 && tp.isSelected() && tp.isRendered()) {
+            if (tp.getY() > client.getWindow().getGuiScaledHeight() - tp.getHeight() - 5 && tp.isSelected() && tp.isRendered()) {
                 moveDown();
                 return;
             }
@@ -137,10 +137,10 @@ public class TPHandler {
         }
     }
     public void moveRight() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         for (TPGUIRow tpGUIRow : tpGUIRows) {
             TPOverlay tp = tpGUIRow.getTP();
-            if (tp.getX() >= client.getWindow().getScaledWidth() - tp.getWidth() && tp.isSelected() && tp.isRendered()) {
+            if (tp.getX() >= client.getWindow().getGuiScaledWidth() - tp.getWidth() && tp.isSelected() && tp.isRendered()) {
                 return;
             }
         }
@@ -152,10 +152,10 @@ public class TPHandler {
         }
     }
     public void moveRightFast() {
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         for (TPGUIRow tpGUIRow : tpGUIRows) {
             TPOverlay tp = tpGUIRow.getTP();
-            if (tp.getX() > client.getWindow().getScaledWidth() - tp.getWidth() - 5 && tp.isSelected() && tp.isRendered()) {
+            if (tp.getX() > client.getWindow().getGuiScaledWidth() - tp.getWidth() - 5 && tp.isSelected() && tp.isRendered()) {
                 moveRight();
                 return;
             }

@@ -9,8 +9,8 @@ import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.client.overlays.VVOverlay;
 import net.fragger.creatoroverlays.creatoroverlays;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.*;
 import static net.fragger.creatoroverlays.util.config.COConfigs.COLOR_MODE;
@@ -18,8 +18,8 @@ import static net.fragger.creatoroverlays.util.config.COConfigs.VV_COLOR;
 
 public class VVGUI extends AbstractGUI implements OverlayGUI {
 
-    public static final Identifier Gridlines_ON = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/gridlines_on.png");
-    public static final Identifier Gridlines_OFF = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/gridlines_off.png");
+    public static final Identifier Gridlines_ON = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/gridlines_on.png");
+    public static final Identifier Gridlines_OFF = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/gridlines_off.png");
 
     public WPlainPanel vvPanel = new WPlainPanel();
     private WToggleButton toggle;
@@ -37,7 +37,7 @@ public class VVGUI extends AbstractGUI implements OverlayGUI {
 
         vvPanel.setSize(RootGUI.guiWidth, RootGUI.guiHeight);
 
-        WLabel head = new WLabel(Text.translatable("key.creatoroverlays.gui.verticalvideo"));
+        WLabel head = new WLabel(Component.translatable("key.creatoroverlays.gui.verticalvideo"));
         head.setHorizontalAlignment(HorizontalAlignment.CENTER);
         vvPanel.add(head, 120, 10);
 
@@ -64,10 +64,10 @@ public class VVGUI extends AbstractGUI implements OverlayGUI {
 
         updateSprite();
 
-        WButton close = new WButton(Text.translatable("key.creatoroverlays.gui.close"));
+        WButton close = new WButton(Component.translatable("key.creatoroverlays.gui.close"));
         vvPanel.add(close, 200, 200, 40, 20);
         close.setOnClick(() -> {
-            coScreen.close();
+            coScreen.onClose();
             COConfigs.writeConfigs();
         });
 

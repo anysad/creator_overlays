@@ -1,7 +1,10 @@
 package net.fragger.creatoroverlays.event;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fragger.creatoroverlays.client.TPHandler;
 import net.fragger.creatoroverlays.client.gui.COScreen;
 import net.fragger.creatoroverlays.client.gui.RootGUI;
@@ -10,18 +13,18 @@ import net.fragger.creatoroverlays.client.overlays.CamOverlay;
 import net.fragger.creatoroverlays.client.overlays.CustomOverlay;
 import net.fragger.creatoroverlays.client.overlays.RO3Overlay;
 import net.fragger.creatoroverlays.client.overlays.VVOverlay;
+import net.fragger.creatoroverlays.creatoroverlays;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.InputUtil;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 
-public class KeyInputHandler implements HudRenderCallback {
+public class KeyInputHandler {
 
+    public static final KeyMapping.Category KEY_CATEGORY_CREATOROVERLAYS = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID, "creatoroverlays"));
 
-    public static final String KEY_CATEGORY_CREATOROVERLAYS = "key.category.creatoroverlays.creatoroverlays";
     public static final String KEY_DISPLAY_RO3OVERLAY = "key.creatoroverlays.display_ro3overlay";
     public static final String KEY_DISPLAY_VVOVERLAY = "key.creatoroverlays.display_vvoverlay";
     public static final String KEY_DISPLAY_TPOVERLAY = "key.creatoroverlays.display_tpoverlay";
@@ -38,21 +41,21 @@ public class KeyInputHandler implements HudRenderCallback {
     public static final String KEY_GUI = "key.creatoroverlays.gui";
     public static final String KEY_SELECT_TP_COLOR = "key.creatoroverlays.select.tp_color";
 
-    public static KeyBinding ro3displayKey;
-    public static KeyBinding vvdisplayKey;
-    public static KeyBinding tpdisplayKey;
-    public static KeyBinding camdisplayKey;
-    public static KeyBinding customDisplayKey;
-    public static KeyBinding cocolorKey;
-    public static KeyBinding corotateupKey;
-    public static KeyBinding corotatedownKey;
-    public static KeyBinding coupKey;
-    public static KeyBinding codownKey;
-    public static KeyBinding corightKey;
-    public static KeyBinding coleftKey;
-    public static KeyBinding modifierKey;
-    public static KeyBinding guiKey;
-    public static KeyBinding selectAllTPColor;
+    public static KeyMapping ro3displayKey;
+    public static KeyMapping vvdisplayKey;
+    public static KeyMapping tpdisplayKey;
+    public static KeyMapping camdisplayKey;
+    public static KeyMapping customDisplayKey;
+    public static KeyMapping cocolorKey;
+    public static KeyMapping corotateupKey;
+    public static KeyMapping corotatedownKey;
+    public static KeyMapping coupKey;
+    public static KeyMapping codownKey;
+    public static KeyMapping corightKey;
+    public static KeyMapping coleftKey;
+    public static KeyMapping modifierKey;
+    public static KeyMapping guiKey;
+    public static KeyMapping selectAllTPColor;
 
     public static RO3GUI ro3GUI = new RO3GUI();
     public static RO3Overlay ro3Overlay = ro3GUI.getOverlay();
@@ -72,13 +75,13 @@ public class KeyInputHandler implements HudRenderCallback {
 
     //uses Hud Render Callback to check for keypresses, as to fix the issue with not being able to toggle overlays while Replay Mod recordings are paused
     //very unconventional, but it works lol
-    public void onHudRender(DrawContext drawContext, RenderTickCounter tickDelta) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         /*
          *
          * Toggle Keys
          */
         //Handles RO3 Overlay Key Press
-        if (ro3displayKey.wasPressed()) {
+        if (ro3displayKey.consumeClick()) {
             if (vvOverlay.isRendered()) {
                 ro3Overlay.setisRendered(false);
                 vvOverlay.setRO3VV(!vvOverlay.getRO3VV());
@@ -87,19 +90,19 @@ public class KeyInputHandler implements HudRenderCallback {
             }
         }
         //Handles Vertical Video Key Press
-        if (vvdisplayKey.wasPressed()) {
+        if (vvdisplayKey.consumeClick()) {
             vvGUI.toggle();
         }
         //Handels Tracking Points Key Press
-        if (tpdisplayKey.wasPressed()) {
+        if (tpdisplayKey.consumeClick()) {
             tpOverlay.updateRenderStatus();
         }
         //Handles Cam Key Press
-        if (camdisplayKey.wasPressed()) {
+        if (camdisplayKey.consumeClick()) {
             camGUI.toggle();
         }
         //Handles Custom Key Press
-        if (customDisplayKey.wasPressed()) {
+        if (customDisplayKey.consumeClick()) {
             customGUI.toggle();
         }
 
@@ -108,7 +111,7 @@ public class KeyInputHandler implements HudRenderCallback {
          * Overlay Cycle Keys
          */
         //Cycles Through Colors
-        if (cocolorKey.wasPressed()) {
+        if (cocolorKey.consumeClick()) {
             if (tpOverlay.isRendered()) {
                 tpOverlay.cycleColor();
             } else if (camOverlay.isRendered()) {
@@ -120,7 +123,7 @@ public class KeyInputHandler implements HudRenderCallback {
             }
         }
         //Cycles Rotations Up
-        if (corotateupKey.wasPressed()) {
+        if (corotateupKey.consumeClick()) {
             if (tpOverlay.isRendered()) {
                 tpOverlay.cycleSelectedUp();
             } else if (camOverlay.isRendered()) {
@@ -132,7 +135,7 @@ public class KeyInputHandler implements HudRenderCallback {
             }
         }
         //Cycles Rotations Down
-        if (corotatedownKey.wasPressed()) {
+        if (corotatedownKey.consumeClick()) {
             if (tpOverlay.isRendered()) {
                 tpOverlay.cycleSelectedDown();
             } else if (camOverlay.isRendered()) {
@@ -150,32 +153,32 @@ public class KeyInputHandler implements HudRenderCallback {
          */
         //moves tp overlay up
         if (num == 0) {
-            if (coupKey.isPressed()) {
-                if (modifierKey.isPressed()) {
+            if (coupKey.isDown()) {
+                if (modifierKey.isDown()) {
                     tpOverlay.moveUp();
                 } else {
                     tpOverlay.moveUpFast();
                 }
             }
             //moves tp overlay down
-            if (codownKey.isPressed()) {
-                if (modifierKey.isPressed()) {
+            if (codownKey.isDown()) {
+                if (modifierKey.isDown()) {
                     tpOverlay.moveDown();
                 } else {
                     tpOverlay.moveDownFast();
                 }
             }
             //moves tp overlay right
-            if (corightKey.isPressed()) {
-                if (modifierKey.isPressed()) {
+            if (corightKey.isDown()) {
+                if (modifierKey.isDown()) {
                     tpOverlay.moveRight();
                 } else {
                     tpOverlay.moveRightFast();
                 }
             }
             //moves tp overlay left
-            if (coleftKey.isPressed()) {
-                if (modifierKey.isPressed()) {
+            if (coleftKey.isDown()) {
+                if (modifierKey.isDown()) {
                     tpOverlay.moveLeft();
                 } else {
                     tpOverlay.moveLeftFast();
@@ -187,120 +190,115 @@ public class KeyInputHandler implements HudRenderCallback {
         }
 
         //opens GUI
-        if (guiKey.wasPressed()) {
-            MinecraftClient.getInstance().setScreen(coScreen);
+        if (guiKey.isDown()) {
+            Minecraft.getInstance().gui.setScreen(coScreen);
             COConfigs.writeConfigs();
         }
         //selects all tracking points of the same color
-        if (selectAllTPColor.wasPressed()) {
+        if (selectAllTPColor.consumeClick()) {
            tpOverlay.selectSameColor(tpOverlay.getSelected().color());
         }
     }
     public static void register() {
         //set modifier key bind
-        modifierKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        modifierKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_MODIFIER,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_CONTROL,
+                InputConstants.KEY_RCONTROL,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets the RO3 display key bind
-        ro3displayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        ro3displayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_DISPLAY_RO3OVERLAY,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F9,
+                InputConstants.KEY_F9,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets Vertial Video key bind
-        vvdisplayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        vvdisplayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_DISPLAY_VVOVERLAY,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F8,
+                InputConstants.KEY_F8,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //set Tracking Point key bind
-        tpdisplayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        tpdisplayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_DISPLAY_TPOVERLAY,
-                InputUtil.Type.KEYSYM,
-                InputUtil.UNKNOWN_KEY.getCode(),
+                InputConstants.UNKNOWN.getValue(),
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets Cam key bind
-        camdisplayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        camdisplayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_DISPLAY_CAMOVERLAY,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F7,
+                InputConstants.KEY_F7,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets Custom key bind
-        customDisplayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        customDisplayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_DISPLAY_CUSTOMOVERLAY,
-                InputUtil.Type.KEYSYM,
-                InputUtil.UNKNOWN_KEY.getCode(),
+                InputConstants.UNKNOWN.getValue(),
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets color cycle key bind
-        cocolorKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        cocolorKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_COLOR,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_F4,
+                InputConstants.KEY_F4,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
         //sets the rotate up key bind
-        corotateupKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        corotateupKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_ROTATEUP,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_BRACKET,
+                InputConstants.KEY_RBRACKET,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        corotatedownKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        corotatedownKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_ROTATEDOWN,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_LEFT_BRACKET,
+                InputConstants.KEY_LBRACKET,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        coupKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        coupKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_UP,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_UP,
+                InputConstants.KEY_UP,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        codownKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        codownKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_DOWN,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_DOWN,
+                InputConstants.KEY_DOWN,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        corightKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        corightKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_RIGHT,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT,
+                InputConstants.KEY_RIGHT,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        coleftKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        coleftKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 KEY_CO_LEFT,
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_LEFT,
+                InputConstants.KEY_LEFT,
                 KEY_CATEGORY_CREATOROVERLAYS
         ));
-        guiKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-           KEY_GUI,
-           InputUtil.Type.KEYSYM,
-           GLFW.GLFW_KEY_GRAVE_ACCENT,
-           KEY_CATEGORY_CREATOROVERLAYS
+        guiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+               KEY_GUI,
+               InputConstants.KEY_GRAVE,
+               KEY_CATEGORY_CREATOROVERLAYS
         ));
-        selectAllTPColor = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        selectAllTPColor = KeyMappingHelper.registerKeyMapping(new KeyMapping(
            KEY_SELECT_TP_COLOR,
-           InputUtil.Type.KEYSYM,
-           InputUtil.UNKNOWN_KEY.getCode(),
+           InputConstants.UNKNOWN.getValue(),
            KEY_CATEGORY_CREATOROVERLAYS
         ));
     }
-    public void initialize(){
-        EVENT.register(ro3Overlay);
-        EVENT.register(vvOverlay);
-        EVENT.register(camOverlay);
-        EVENT.register(customOverlay);
-        EVENT.register(this);
+
+    private static void attach(String path, HudElement element) {
+        HudElementRegistry.attachElementBefore(
+                VanillaHudElements.CHAT,
+                Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID, path),
+                element
+        );
+    }
+
+    public void initialize()
+    {
+        attach("ro3_overlay", ro3Overlay::extractRenderState);
+        attach("vv_overlay", vvOverlay::extractRenderState);
+        attach("cam_overlay", camOverlay::extractRenderState);
+        attach("custom_overlay", customOverlay::extractRenderState);
+        attach("key_input", this::extractRenderState);
     }
 }

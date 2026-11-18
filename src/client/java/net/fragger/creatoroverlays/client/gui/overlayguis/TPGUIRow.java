@@ -4,7 +4,7 @@ import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon;
 import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.client.overlays.TPOverlay;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.tpGUI;
 import static net.fragger.creatoroverlays.event.KeyInputHandler.tpOverlay;
@@ -12,10 +12,10 @@ import static net.fragger.creatoroverlays.event.KeyInputHandler.tpOverlay;
 
 public class TPGUIRow {
 
-    private static final Text black = Text.translatable("key.creatoroverlays.gui.color.black");
-    private static final Text white = Text.translatable("key.creatoroverlays.gui.color.white");
-    private static final Text red = Text.translatable("key.creatoroverlays.gui.color.red");
-    private static final Text blue = Text.translatable("key.creatoroverlays.gui.color.blue");
+    private static final Component black = Component.translatable("key.creatoroverlays.gui.color.black");
+    private static final Component white = Component.translatable("key.creatoroverlays.gui.color.white");
+    private static final Component red = Component.translatable("key.creatoroverlays.gui.color.red");
+    private static final Component blue = Component.translatable("key.creatoroverlays.gui.color.blue");
 
     private TPOverlay overlay = new TPOverlay();
     private WLabel section;
@@ -23,13 +23,13 @@ public class TPGUIRow {
     private WToggleButton toggleTP = new WToggleButton(RootGUI.TOGGLE_ON, RootGUI.TOGGLE_OFF);
     private WButton colorTP = new WButton(getColor());;
     private WButton reset = new WButton(new TextureIcon(RootGUI.RESET));;
-    private WButton remove = new WButton(Text.of("X"));;
+    private WButton remove = new WButton(Component.nullToEmpty("X"));;
     private WSprite texture;
     private WPlainPanel tpRow = new WPlainPanel();
 
 
     int y = 5;
-    public TPGUIRow(Text label) {
+    public TPGUIRow(Component label) {
         tpGUI.updateMultiSelection(overlay.color());
 
         tpRow.setSize(220, 45);
@@ -98,14 +98,14 @@ public class TPGUIRow {
         tpRow.add(texture, 200, y, 20, 20);
     }
 
-    public void updateLabel(Text newLable) {
+    public void updateLabel(Component newLable) {
         tpRow.remove(section);
         section = new WLabel(newLable);
         section.setColor(0xFFFFFF);
         tpRow.add(section, 10, y - 10);
     }
 
-    private Text getColor() {
+    private Component getColor() {
         if (overlay.color() == 0) {
             return black;
         } else if (overlay.color() == 1) {

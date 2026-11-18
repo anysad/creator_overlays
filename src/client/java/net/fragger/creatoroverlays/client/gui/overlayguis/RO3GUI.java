@@ -8,7 +8,7 @@ import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.client.gui.AbstractGUI;
 import net.fragger.creatoroverlays.client.overlays.RO3Overlay;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.*;
 import static net.fragger.creatoroverlays.util.config.COConfigs.*;
@@ -32,7 +32,7 @@ public class RO3GUI extends AbstractGUI implements OverlayGUI {
 
         ro3Panel.setSize(RootGUI.guiWidth, RootGUI.guiHeight);
 
-        WLabel head = new WLabel(Text.translatable("key.creatoroverlays.gui.gridlines"));
+        WLabel head = new WLabel(Component.translatable("key.creatoroverlays.gui.gridlines"));
         head.setHorizontalAlignment(HorizontalAlignment.CENTER);
         ro3Panel.add(head, 120, 10);
 
@@ -48,9 +48,9 @@ public class RO3GUI extends AbstractGUI implements OverlayGUI {
             changeColor();
         });
 
-        type = new WButton(Text.translatable("key.creatoroverlays.gui.gridlines.thirds"));
+        type = new WButton(Component.translatable("key.creatoroverlays.gui.gridlines.thirds"));
         if (!overlay.state) {
-            type.setLabel(Text.translatable("key.creatoroverlays.gui.gridlines.quarters"));
+            type.setLabel(Component.translatable("key.creatoroverlays.gui.gridlines.quarters"));
         }
         ro3Panel.add(type, 145, y, 95, 20);
         type.setOnClick(() -> {
@@ -62,10 +62,10 @@ public class RO3GUI extends AbstractGUI implements OverlayGUI {
 
         updateSprite();
 
-        WButton close = new WButton(Text.translatable("key.creatoroverlays.gui.close"));
+        WButton close = new WButton(Component.translatable("key.creatoroverlays.gui.close"));
         ro3Panel.add(close, 200, 200, 40, 20);
         close.setOnClick(() -> {
-            coScreen.close();
+            coScreen.onClose();
             COConfigs.writeConfigs();
         });
     }
@@ -108,9 +108,9 @@ public class RO3GUI extends AbstractGUI implements OverlayGUI {
         overlay.swap();
         updateSprite();
         if (overlay.state) {
-            type.setLabel(Text.translatable("key.creatoroverlays.gui.gridlines.thirds"));
+            type.setLabel(Component.translatable("key.creatoroverlays.gui.gridlines.thirds"));
         } else {
-            type.setLabel(Text.translatable("key.creatoroverlays.gui.gridlines.quarters"));
+            type.setLabel(Component.translatable("key.creatoroverlays.gui.gridlines.quarters"));
         }
         COConfigs.updateConfig(new Pair<>("ro3.mode", overlay.state));
     }

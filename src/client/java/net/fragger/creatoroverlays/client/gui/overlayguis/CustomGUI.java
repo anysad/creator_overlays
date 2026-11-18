@@ -7,7 +7,7 @@ import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.client.gui.AbstractGUI;
 import net.fragger.creatoroverlays.client.overlays.CustomOverlay;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.coScreen;
 import static net.fragger.creatoroverlays.util.config.COConfigs.CUSTOM_MODE;
@@ -30,7 +30,7 @@ public class CustomGUI extends AbstractGUI {
 
         customPanel.setSize(RootGUI.guiWidth, RootGUI.guiHeight);
 
-        WLabel head = new WLabel(Text.translatable("key.creatoroverlays.gui.custom"));
+        WLabel head = new WLabel(Component.translatable("key.creatoroverlays.gui.custom"));
         head.setHorizontalAlignment(HorizontalAlignment.CENTER);
         customPanel.add(head, 120, 10);
 
@@ -50,13 +50,13 @@ public class CustomGUI extends AbstractGUI {
            overlay.setTexture(filePath.getText());
         });*/
 
-        cycleDown = new WButton(Text.of("<"));
+        cycleDown = new WButton(Component.nullToEmpty("<"));
         customPanel.add(cycleDown, 190, y, 20, 20);
         cycleDown.setOnClick(() -> {
             changeOverlayDown();
         });
 
-        cycleUp = new WButton(Text.of(">"));
+        cycleUp = new WButton(Component.nullToEmpty(">"));
         customPanel.add(cycleUp, 220, y, 20, 20);
         cycleUp.setOnClick(() -> {
             changeOverlayUp();
@@ -69,10 +69,10 @@ public class CustomGUI extends AbstractGUI {
 
         updateSprite();
 
-        WButton close = new WButton(Text.translatable("key.creatoroverlays.gui.close"));
+        WButton close = new WButton(Component.translatable("key.creatoroverlays.gui.close"));
         customPanel.add(close, 200, 200, 40, 20);
         close.setOnClick(() -> {
-            coScreen.close();
+            coScreen.onClose();
             COConfigs.writeConfigs();
         });
     }

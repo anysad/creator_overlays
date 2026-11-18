@@ -8,7 +8,7 @@ import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.client.gui.AbstractGUI;
 import net.fragger.creatoroverlays.client.overlays.CamOverlay;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.coScreen;
 import static net.fragger.creatoroverlays.util.config.COConfigs.*;
@@ -31,7 +31,7 @@ public class CAMGUI extends AbstractGUI implements OverlayGUI {
 
         camPanel.setSize(RootGUI.guiWidth, RootGUI.guiHeight);
 
-        WLabel head = new WLabel(Text.translatable("key.creatoroverlays.gui.cam"));
+        WLabel head = new WLabel(Component.translatable("key.creatoroverlays.gui.cam"));
         head.setHorizontalAlignment(HorizontalAlignment.CENTER);
         camPanel.add(head, 120, 10);
 
@@ -47,9 +47,9 @@ public class CAMGUI extends AbstractGUI implements OverlayGUI {
             changeColor();
         });
 
-        side = new WButton(Text.translatable("key.creatoroverlays.gui.side.left"));
+        side = new WButton(Component.translatable("key.creatoroverlays.gui.side.left"));
         if (!overlay.state) {
-            side.setLabel(Text.translatable("key.creatoroverlays.gui.side.right"));
+            side.setLabel(Component.translatable("key.creatoroverlays.gui.side.right"));
         }
         camPanel.add(side, 145, y, 95, 20);
         side.setOnClick(() -> {
@@ -61,10 +61,10 @@ public class CAMGUI extends AbstractGUI implements OverlayGUI {
 
         updateSprite();
 
-        WButton close = new WButton(Text.translatable("key.creatoroverlays.gui.close"));
+        WButton close = new WButton(Component.translatable("key.creatoroverlays.gui.close"));
         camPanel.add(close, 200, 200, 40, 20);
         close.setOnClick(() -> {
-            coScreen.close();
+            coScreen.onClose();
             COConfigs.writeConfigs();
         });
 
@@ -96,9 +96,9 @@ public class CAMGUI extends AbstractGUI implements OverlayGUI {
         overlay.swap();
         updateSprite();
         if (overlay.state) {
-            side.setLabel(Text.translatable("key.creatoroverlays.gui.side.left"));
+            side.setLabel(Component.translatable("key.creatoroverlays.gui.side.left"));
         } else {
-            side.setLabel(Text.translatable("key.creatoroverlays.gui.side.right"));
+            side.setLabel(Component.translatable("key.creatoroverlays.gui.side.right"));
         }
         COConfigs.updateConfig(new Pair<>("cam.mode", overlay.state));
     }

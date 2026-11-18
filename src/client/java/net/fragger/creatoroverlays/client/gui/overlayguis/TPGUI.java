@@ -8,20 +8,20 @@ import net.fragger.creatoroverlays.client.TPHandler;
 import net.fragger.creatoroverlays.client.gui.RootGUI;
 import net.fragger.creatoroverlays.creatoroverlays;
 import net.fragger.creatoroverlays.util.config.COConfigs;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import static net.fragger.creatoroverlays.event.KeyInputHandler.coScreen;
 import static net.fragger.creatoroverlays.event.KeyInputHandler.tpOverlay;
 
 public class TPGUI extends WPlainPanel {
 
-    public static final Identifier OUTLINE = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/tp_outline.png");
+    public static final Identifier OUTLINE = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/tp_outline.png");
 
-    public static final Identifier MULTIPOINT_BLACK = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/multi_point_black.png");
-    public static final Identifier MULTIPOINT_WHITE = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/multi_point_white.png");
-    public static final Identifier MULTIPOINT_RED = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/multi_point_red.png");
-    public static final Identifier MULTIPOINT_BLUE = Identifier.of(creatoroverlays.MOD_ID,"textures/widgets/multi_point_blue.png");
+    public static final Identifier MULTIPOINT_BLACK = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/multi_point_black.png");
+    public static final Identifier MULTIPOINT_WHITE = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/multi_point_white.png");
+    public static final Identifier MULTIPOINT_RED = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/multi_point_red.png");
+    public static final Identifier MULTIPOINT_BLUE = Identifier.fromNamespaceAndPath(creatoroverlays.MOD_ID,"textures/widgets/multi_point_blue.png");
 
     public static WPlainPanel tpPanel = new WPlainPanel();
 
@@ -42,13 +42,13 @@ public class TPGUI extends WPlainPanel {
 
 
 
-        WButton addOverlay = new WButton(Text.literal("+"));
+        WButton addOverlay = new WButton(Component.literal("+"));
         tpPanel.add(addOverlay, 10, 10, 20, 20);
         addOverlay.setOnClick(() -> {
             tpOverlay.addTP();
         });
 
-        WLabel head = new WLabel(Text.translatable("key.creatoroverlays.gui.trackingpoints"));
+        WLabel head = new WLabel(Component.translatable("key.creatoroverlays.gui.trackingpoints"));
         head.setHorizontalAlignment(HorizontalAlignment.CENTER);
         tpPanel.add(head, 115, 10);
 
@@ -71,17 +71,17 @@ public class TPGUI extends WPlainPanel {
         });
 
         //close button
-        WButton close = new WButton(Text.translatable("key.creatoroverlays.gui.close"));
+        WButton close = new WButton(Component.translatable("key.creatoroverlays.gui.close"));
         tpPanel.add(close, 200, 200, 40, 20);
         close.setOnClick(() -> {
-            coScreen.close();
+            coScreen.onClose();
             COConfigs.writeConfigs();
         });
 
     }
 
     public void addRow(int i) {
-        TPGUIRow newRow = new TPGUIRow(Text.of("Tracking Point " + (i + 1)));
+        TPGUIRow newRow = new TPGUIRow(Component.nullToEmpty("Tracking Point " + (i + 1)));
         pointPanel.setSize(220, TPHandler.tpGUIRows.size() * 35);
         pointPanel.add(newRow.rowPanel(), 0, ((i + 1) * 35) - 25);
         TPHandler.tpGUIRows.add(newRow);
