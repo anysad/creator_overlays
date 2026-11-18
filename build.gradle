@@ -35,6 +35,7 @@ dependencies {
 	implementation("com.github.CottonMC:LibGui:${libgui_version}") {
 		exclude group: "io.github.cottonmc"
 	}
+	include("com.github.CottonMC:LibGui:${libgui_version}")
 }
 
 processResources {
